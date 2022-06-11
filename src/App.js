@@ -1,12 +1,31 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 
 import AOS from "aos";
 import { BsMegaphone } from "react-icons/bs";
+import { GiHamburgerMenu } from "react-icons/gi";
+import { AiOutlineCloseCircle } from "react-icons/ai";
 
 function App() {
+  const [showNav, setShowNav] = useState(false);
+
   const iframe = `
-  <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1957.5328235492404!2d125.0148878915123!3d11.108485405942526!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sph!4v1654867972118!5m2!1sen!2sph" width="100%" height="500" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>`;
+  <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1957.5328235492404!2d125.0148878915123!3d11.108485405942526!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sph!4v1654867972118!5m2!1sen!2sph" width="100%" height="500vh" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>`;
+
+  const [navList, useNavList] = useState([
+    {
+      listName: "home",
+    },
+    {
+      listName: "projects",
+    },
+    {
+      listName: "services",
+    },
+    {
+      listName: "map",
+    },
+  ]);
 
   useEffect(() => {
     AOS.init();
@@ -18,35 +37,48 @@ function App() {
       <div className="navbar">
         <div className="navbar-container">
           <h3 className="title"> SK Canramos Project </h3>
+          <h3 className="title-2"> SK Canramos </h3>
           {/* LIST */}
-          <ul className="navlist">
-            <li>
-              <a href="#home">HOME</a>
-            </li>
-            <li>
-              <a href="#project">PROJECTS</a>
-            </li>
-            <li>
-              <a href="#services">SERVICES</a>
-            </li>
-            <li>
-              <a href="#map">MAP</a>
-            </li>
+          <ul className={showNav ? "navlist show" : "navlist"}>
+            {navList.map((list, idx) => (
+              <li
+                onClick={() => {
+                  setShowNav(false);
+                }}
+                key={idx}
+              >
+                <a href={`#${list.listName}`}>{list.listName.toUpperCase()}</a>
+              </li>
+            ))}
             <li> LOGIN </li>
           </ul>
+
+          <div id="menudiv" className="hamburger-menu">
+            {showNav ? (
+              <AiOutlineCloseCircle
+                onClick={() => {
+                  setShowNav(false);
+                }}
+                size={24}
+              />
+            ) : (
+              <GiHamburgerMenu
+                onClick={() => {
+                  setShowNav(true);
+                }}
+                size={24}
+              />
+            )}
+          </div>
         </div>
       </div>
       {/* HOME PAGE */}
       <section id="home" className="home">
         <div className="home-container">
           {/* SK IMAGE */}
-          <div
-            data-aos="fade-right"
-            data-aos-duration="1500"
-            className="sk-image-container"
-          >
+          <div className="sk-image-container">
             <img
-              data-aos-duration="1500"
+              className="animate__animated animate__bounce animate__delay-0.5s"
               src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Sangguniang_Kabataan_logo.svg/2048px-Sangguniang_Kabataan_logo.svg.png"
               alt="sk-image"
             />
@@ -54,7 +86,7 @@ function App() {
           {/* HOME TEXT */}
           <div
             data-aos="fade-left"
-            data-aos-duration="1500"
+            data-aos-duration="1800"
             className="home-text-container"
           >
             <h2> WELCOME TO</h2>
@@ -66,7 +98,7 @@ function App() {
         </div>
       </section>
       {/* ABOUT SECTION */}
-      <section id="project" className="project">
+      <section id="projects" className="project">
         <div className="project-container">
           <div
             data-aos="fade-up"
@@ -128,10 +160,10 @@ function App() {
         <div className="services-container">
           <div
             data-aos="fade-up"
-            data-aos-duration="1000"
+            data-aos-duration="2000"
             className="services-text"
           >
-            <h2> Services </h2>
+            <h2>Services</h2>
             <p> Offered Documents </p>
           </div>
           {/* CARDS */}

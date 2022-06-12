@@ -13,7 +13,15 @@ a {
   cursor: pointer;
 }
 
+#menu-hide {
+  display: none;
+}
+
 .title-2 {
+  display: none;
+}
+
+.hide-li {
   display: none;
 }
 

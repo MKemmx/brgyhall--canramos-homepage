@@ -1,7 +1,7 @@
 import React from "react";
 
 // Component
-import Footer from "./Footer";
+import Footer from "../Footer";
 
 import { BsMegaphone } from "react-icons/bs";
 

@@ -27,7 +27,7 @@ const Navbar = ({ showNav, setShowNav }) => {
   ];
 
   // Concst REG PATHS
-  const regPaths = ["/login", "/register", "/"];
+  const regPaths = ["/login", "/register", "/transaction", "/"];
 
   return (
     <>

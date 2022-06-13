@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import "./LoginCSS.css";
 
 // Component
-import Footer from "./Footer";
+import Footer from "../Footer";
 
 const Login = () => {
   const initialLoginState = {

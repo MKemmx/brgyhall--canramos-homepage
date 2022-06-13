@@ -34,11 +34,6 @@ a {
   scroll-behavior: smooth;
 }
 
-/* html,
-body {
-  overflow-x: hidden;
-} */
-
 .navbar {
   width: 100%;
   position: sticky;

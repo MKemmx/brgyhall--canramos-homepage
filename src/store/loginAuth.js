@@ -7,10 +7,9 @@ import Swal from "sweetalert2";
 // AXIOS AND API_LINK
 import axios from "axios";
 import { API_LINK } from "../utils/apiLink";
-import setAuthToken from "../utils/setAuthToken";
 
 const loginStore = (set, get) => ({
-  token: localStorage.getItem("token"),
+  token: null,
   isAuthenticated: false,
   loading: false,
   user: null,
@@ -18,8 +17,6 @@ const loginStore = (set, get) => ({
   loginResident: async (values) => {
     try {
       const { data } = await axios.post(`${API_LINK}/auth-resident`, values);
-      localStorage.setItem("token", data.token);
-
       set({
         token: data.token,
         user: data.user,
@@ -27,7 +24,6 @@ const loginStore = (set, get) => ({
         role: data.role,
       });
     } catch (error) {
-      localStorage.removeItem("token");
       set({
         token: null,
         user: null,
@@ -38,15 +34,21 @@ const loginStore = (set, get) => ({
     }
   },
   loadResident: async () => {
-    const token = localStorage.getItem("token");
-    setAuthToken(token);
+    const { state } = JSON.parse(localStorage.getItem("loginState"));
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": state.token,
+      },
+    };
+
     try {
       set({
         loading: true,
       });
-      const { data } = await axios.get(`${API_LINK}/auth-resident`);
+      const { data } = await axios.get(`${API_LINK}/auth-resident`, config);
       set({
-        token: token,
+        token: state.token,
         user: data.user,
         isAuthenticated: true,
         role: data.role,
@@ -63,8 +65,6 @@ const loginStore = (set, get) => ({
     }
   },
   logout: async () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("role");
     set({
       token: null,
       user: null,

@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 // IMPORT CSS
 import "./App.css";
+
 // IMPORT OUTER
 import AOS from "aos";
 

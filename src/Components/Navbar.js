@@ -33,7 +33,7 @@ const Navbar = ({ showNav, setShowNav }) => {
   // Concst REG PATHS
   const regPaths = ["/login", "/register", "/transaction", "/"];
   // GLOBAL STATES
-  const { isAuthenticated, logout } = useLoginStore((state) => state);
+  const { isAuthenticated, logout, user } = useLoginStore((state) => state);
 
   return (
     <>
@@ -114,7 +114,7 @@ const Navbar = ({ showNav, setShowNav }) => {
               ) : (
                 <>
                   <div onClick={logout} className="avatar">
-                    <div className="avatar-container">L</div>
+                    <div className="avatar-container"> {user.firstName[0]}</div>
                   </div>
                 </>
               )}

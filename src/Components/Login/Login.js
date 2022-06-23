@@ -59,9 +59,10 @@ const Login = () => {
             <div className="login-container">
               {/* SK IMAGE */}
               <div className="sk-image-container">
-                <h2 className="login-page-title animate__animated animate__rubberBand animate__delay-0.7s">
-                  Canramos Login Page
-                </h2>
+                {/* <h2 className="login-page-title animate__animated animate__rubberBand animate__delay-0.7s">
+                  Login Page
+                </h2> */}
+
                 <img
                   alt="login-logo"
                   id="login-image"

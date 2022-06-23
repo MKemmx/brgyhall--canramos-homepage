@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+
+// Data Table
 import MUIDataTable from "mui-datatables";
 
 // State Store
@@ -8,6 +10,9 @@ import useLoginStore from "../../store/loginAuth";
 // API LINK AND AXIOS
 import { API_LINK } from "../../utils/apiLink";
 import axios from "axios";
+
+// Sweet Alert
+import Swal from "sweetalert2";
 
 const Transaction = () => {
   let navigate = useNavigate();
@@ -57,8 +62,12 @@ const Transaction = () => {
 
   const columns = [
     {
+      name: "_id",
+      label: "Transaction Id",
+    },
+    {
       name: "name",
-      label: "Name",
+      label: "Name of Certificate",
       options: {
         filter: true,
         sort: true,
@@ -80,10 +89,63 @@ const Transaction = () => {
         sort: true,
       },
     },
+    {
+      name: "Action",
+      options: {
+        filter: false,
+        sort: false,
+        empty: true,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return (
+            <>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const currentId = tableMeta.rowData[0];
+
+                  Swal.fire({
+                    title: "Cancel transacion?",
+                    text: "This transaction will be cancelled",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, confirm",
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      Swal.fire(
+                        "Deleted!",
+                        "Your file has been deleted.",
+                        "success"
+                      );
+                    }
+                  });
+                }}
+              >
+                Cancel
+              </button>
+              {/* <button
+                onClick={(e) => {
+                  const { data } = this.state;
+                  data.shift();
+                  this.setState({ data });
+                }}
+              >
+                Delete
+              </button> */}
+            </>
+          );
+        },
+      },
+    },
   ];
 
   const options = {
+    onRowClick: (e) => {
+      console.log(e);
+    },
     print: false,
+    filterType: "dropdown",
     textLabels: {
       body: {
         noMatch: "Sorry, no records found!",

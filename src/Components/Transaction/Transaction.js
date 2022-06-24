@@ -49,11 +49,15 @@ const Transaction = () => {
         };
       });
 
-      let mergeData = certificatesArray.concat(indigenciesArray);
-      mergeData.sort((a, b) => {
-        return new Date(a.created_at) + new Date(b.created_at);
-      });
+      let mergeData = certificatesArray
+        .concat(indigenciesArray)
+        .sort((a, b) => {
+          return new Date(a.created_at) + new Date(b.created_at);
+        })
+        .reverse();
       setData(mergeData);
+      //
+      console.log(mergeData);
     } catch (error) {
       console.log(error.response.data.msg);
     }
@@ -108,6 +112,24 @@ const Transaction = () => {
         },
       },
     },
+
+    // {
+    //   name: "create_at",
+    //   label: "created_at",
+    //   options: {
+    //     filter: true,
+    //     sort: true,
+    //     customBodyRender: (value, tableMeta, updateValue) => {
+    //       console.log(tableMeta);
+    //       return (
+    //         <>
+    //           <p>{value}</p>
+    //         </>
+    //       );
+    //     },
+    //   },
+    // },
+
     {
       name: "Action",
       options: {
@@ -229,15 +251,45 @@ const Transaction = () => {
 
   // Send Transaction Request
   const sendRequest = async (num) => {
+    const { value: requestPurpose } = await Swal.fire({
+      title: "Request Form",
+      input: "text",
+      inputLabel: "Please insert the request purpose",
+      inputPlaceholder: "Enter text...",
+    });
+
+    const data = {
+      residentRequest: user._id,
+      requestPurpose,
+    };
+
+    if (requestPurpose === undefined || requestPurpose === "") {
+      return Swal.fire("Error", "Please type request purpose", "error");
+    }
+
     if (num === 1) {
-      return;
+      await axios.post(`${API_LINK}/certificate/create-certificate/`, data);
+      userTransactions();
+      return Swal.fire(
+        "Request Sent",
+        "Barangay certificate request is now waiting for approval!",
+        "success"
+      );
     }
+
     if (num === 2) {
-      return;
+      await axios.post(`${API_LINK}/indigency/create-indigency/`, data);
+      userTransactions();
+      return Swal.fire(
+        "Request Sent",
+        "Barangay Indigency request is now waiting for approval!",
+        "success"
+      );
     }
-    if (num === 3) {
-      return;
-    }
+
+    // if (num === 3) {
+    //   return;
+    // }
   };
 
   useEffect(() => {
@@ -251,23 +303,6 @@ const Transaction = () => {
           <div className="transaction-card-container">
             <div className="transaction-card">
               <div className="transaction-card-header">
-                <h2>Barangay Indigency</h2>
-              </div>
-              <div className="transaction-card-body">
-                <p>
-                  Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sunt
-                  sapiente in iste, incidunt beatae magnam dolorem fugiat unde
-                  provident tenetur amet, reprehenderit voluptate eaque
-                  doloremque minim.
-                </p>
-                <button onClick={sendRequest(1)} className="transaction-btn">
-                  Send Request
-                </button>
-              </div>
-            </div>
-
-            <div className="transaction-card">
-              <div className="transaction-card-header">
                 <h2>Barangay Certificate</h2>
               </div>
               <div className="transaction-card-body">
@@ -277,9 +312,35 @@ const Transaction = () => {
                   provident tenetur amet, reprehenderit voluptate eaque
                   doloremque minim.
                 </p>
+                <button
+                  onClick={() => {
+                    sendRequest(1);
+                  }}
+                  className="transaction-btn"
+                >
+                  Send Request
+                </button>
               </div>
-              <button onClick={sendRequest(2)} className="transaction-btn">
-                {" "}
+            </div>
+
+            <div className="transaction-card">
+              <div className="transaction-card-header">
+                <h2>Barangay Indigency</h2>
+              </div>
+              <div className="transaction-card-body">
+                <p>
+                  Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sunt
+                  sapiente in iste, incidunt beatae magnam dolorem fugiat unde
+                  provident tenetur amet, reprehenderit voluptate eaque
+                  doloremque minim.
+                </p>
+              </div>
+              <button
+                onClick={() => {
+                  sendRequest(1);
+                }}
+                className="transaction-btn"
+              >
                 Send Request
               </button>
             </div>
@@ -295,8 +356,12 @@ const Transaction = () => {
                   doloremque minim.
                 </p>
               </div>
-              <button onClick={sendRequest(3)} className="transaction-btn">
-                {" "}
+              <button
+                onClick={() => {
+                  sendRequest(1);
+                }}
+                className="transaction-btn"
+              >
                 Send Request
               </button>
             </div>

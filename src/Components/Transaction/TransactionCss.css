@@ -2,6 +2,7 @@
   margin-top: 30px;
   width: 80%;
   margin-inline: auto;
+  margin-bottom: 50px;
 }
 
 .cancel-btn {
@@ -24,12 +25,6 @@
   background-color: #a41a28;
   pointer-events: none;
   cursor: none;
-}
-
-@media screen and (max-width: 899px) {
-  .primeReactContainer {
-    width: 95%;
-  }
 }
 
 .transaction-card-container {
@@ -70,4 +65,50 @@
 
 .transaction-btn:hover {
   background-color: #10499a;
+}
+
+@media screen and (max-width: 899px) {
+  .primeReactContainer {
+    width: 95%;
+  }
+}
+
+@media screen and (max-width: 1420px) {
+  .transaction-card-container {
+    width: 1200px;
+  }
+}
+
+@media screen and (max-width: 1230px) {
+  .transaction-card-container {
+    width: 1000px;
+    padding: 10px 10px;
+  }
+}
+
+@media screen and (max-width: 1020px) {
+  .transaction-card-container {
+    width: 95%;
+    padding: 0;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .transaction-card-container {
+    width: 95%;
+    padding: 0;
+    grid-template-columns: 1fr;
+    grid-row-gap: 20px;
+  }
+
+  .transaction-card {
+    width: 450px;
+    margin-inline: auto;
+  }
+}
+
+@media screen and (max-width: 520px) {
+  .transaction-card {
+    width: 95%;
+  }
 }

@@ -429,9 +429,3 @@ a {
     margin: 0;
   }
 }
-
-.primeReactContainer {
-  margin-top: 60px;
-  width: 80%;
-  margin-inline: auto;
-}

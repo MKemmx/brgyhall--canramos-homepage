@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
+import "./TransactionCss.css";
+
 // Data Table
 import MUIDataTable from "mui-datatables";
 
@@ -16,6 +18,7 @@ import Swal from "sweetalert2";
 
 const Transaction = () => {
   let navigate = useNavigate();
+  const user = useLoginStore((state) => state.user);
   const isAuthenticated = useLoginStore((state) => state.isAuthenticated);
   const token = useLoginStore((state) => state.token);
   if (!isAuthenticated) return navigate("/");
@@ -35,13 +38,13 @@ const Transaction = () => {
       );
       const certificatesArray = data[0].certificate.map((item) => {
         return {
-          name: "Barangay Certificate",
+          name: 1,
           ...item,
         };
       });
       const indigenciesArray = data[0].indigency.map((item) => {
         return {
-          name: "Barangay Indigency",
+          name: 2,
           ...item,
         };
       });
@@ -56,10 +59,6 @@ const Transaction = () => {
     }
   };
 
-  useEffect(() => {
-    userTransactions();
-  }, []);
-
   const columns = [
     {
       name: "_id",
@@ -71,6 +70,19 @@ const Transaction = () => {
       options: {
         filter: true,
         sort: true,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return (
+            <>
+              {value === 1 ? (
+                <p>Barangay Certificate</p>
+              ) : (
+                <>
+                  <p>Barangay Certificate</p>
+                </>
+              )}
+            </>
+          );
+        },
       },
     },
     {
@@ -87,6 +99,13 @@ const Transaction = () => {
       options: {
         filter: true,
         sort: true,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return (
+            <>
+              <p>{value.toUpperCase()}</p>
+            </>
+          );
+        },
       },
     },
     {
@@ -99,9 +118,18 @@ const Transaction = () => {
           return (
             <>
               <button
+                disabled={tableMeta.rowData[3] === "cancelled" ? true : false}
+                className={
+                  tableMeta.rowData[3] === "pending"
+                    ? "cancel-btn"
+                    : "cancel-btn disabled"
+                }
                 onClick={(e) => {
                   e.stopPropagation();
-                  const currentId = tableMeta.rowData[0];
+                  const data = {
+                    currentId: tableMeta.rowData[0],
+                    currentNum: tableMeta.rowData[1],
+                  };
 
                   Swal.fire({
                     title: "Cancel transacion?",
@@ -113,26 +141,13 @@ const Transaction = () => {
                     confirmButtonText: "Yes, confirm",
                   }).then((result) => {
                     if (result.isConfirmed) {
-                      Swal.fire(
-                        "Deleted!",
-                        "Your file has been deleted.",
-                        "success"
-                      );
+                      cancelTransaction(data);
                     }
                   });
                 }}
               >
                 Cancel
               </button>
-              {/* <button
-                onClick={(e) => {
-                  const { data } = this.state;
-                  data.shift();
-                  this.setState({ data });
-                }}
-              >
-                Delete
-              </button> */}
             </>
           );
         },
@@ -141,9 +156,7 @@ const Transaction = () => {
   ];
 
   const options = {
-    onRowClick: (e) => {
-      console.log(e);
-    },
+    selectableRows: false,
     print: false,
     filterType: "dropdown",
     textLabels: {
@@ -181,10 +194,113 @@ const Transaction = () => {
     },
   };
 
+  // Function Cancel Transaction
+  const cancelTransaction = async (data) => {
+    const toCancel = {
+      status: "cancelled",
+    };
+
+    if (data.currentNum === 1) {
+      await axios.put(
+        `${API_LINK}/certificate/update-certificate/${data.currentId}`,
+        toCancel
+      );
+      userTransactions();
+      return Swal.fire(
+        "Cancelled!",
+        "Transaction succuessfully cancelled",
+        "success"
+      );
+    }
+
+    if (data.currentNum === 2) {
+      await axios.put(
+        `${API_LINK}/indigency/update-indigency/${data.currentId}`,
+        toCancel
+      );
+      userTransactions();
+      return Swal.fire(
+        "Cancelled!",
+        "Transaction succuessfully cancelled",
+        "success"
+      );
+    }
+  };
+
+  // Send Transaction Request
+  const sendRequest = async (num) => {
+    if (num === 1) {
+      return;
+    }
+    if (num === 2) {
+      return;
+    }
+    if (num === 3) {
+      return;
+    }
+  };
+
+  useEffect(() => {
+    userTransactions();
+  }, []);
+
   return (
     <>
       {isAuthenticated && (
         <>
+          <div className="transaction-card-container">
+            <div className="transaction-card">
+              <div className="transaction-card-header">
+                <h2>Barangay Indigency</h2>
+              </div>
+              <div className="transaction-card-body">
+                <p>
+                  Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sunt
+                  sapiente in iste, incidunt beatae magnam dolorem fugiat unde
+                  provident tenetur amet, reprehenderit voluptate eaque
+                  doloremque minim.
+                </p>
+                <button onClick={sendRequest(1)} className="transaction-btn">
+                  Send Request
+                </button>
+              </div>
+            </div>
+
+            <div className="transaction-card">
+              <div className="transaction-card-header">
+                <h2>Barangay Certificate</h2>
+              </div>
+              <div className="transaction-card-body">
+                <p>
+                  Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sunt
+                  sapiente in iste, incidunt beatae magnam dolorem fugiat unde
+                  provident tenetur amet, reprehenderit voluptate eaque
+                  doloremque minim.
+                </p>
+              </div>
+              <button onClick={sendRequest(2)} className="transaction-btn">
+                {" "}
+                Send Request
+              </button>
+            </div>
+            <div className="transaction-card">
+              <div className="transaction-card-header">
+                <h2>Barangay Id</h2>
+              </div>
+              <div className="transaction-card-body">
+                <p>
+                  Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sunt
+                  sapiente in iste, incidunt beatae magnam dolorem fugiat unde
+                  provident tenetur amet, reprehenderit voluptate eaque
+                  doloremque minim.
+                </p>
+              </div>
+              <button onClick={sendRequest(3)} className="transaction-btn">
+                {" "}
+                Send Request
+              </button>
+            </div>
+          </div>
           <div className="primeReactContainer">
             <MUIDataTable
               title={"My Transactions"}

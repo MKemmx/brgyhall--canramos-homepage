@@ -1,0 +1,73 @@
+.primeReactContainer {
+  margin-top: 30px;
+  width: 80%;
+  margin-inline: auto;
+}
+
+.cancel-btn {
+  background-color: #dc3545;
+  padding: 12px;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  color: #fff;
+  transition: 0.3s ease-in-out all;
+}
+
+.cancel-btn:hover {
+  background-color: #b52f3d;
+}
+
+.cancel-btn.disabled {
+  opacity: 0.8;
+  background-color: #a41a28;
+  pointer-events: none;
+  cursor: none;
+}
+
+@media screen and (max-width: 899px) {
+  .primeReactContainer {
+    width: 95%;
+  }
+}
+
+.transaction-card-container {
+  margin-top: 30px;
+  width: 1400px;
+  padding: 15px 20px;
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-column-gap: 20px;
+}
+
+.transaction-card {
+  padding: 25px 30px;
+  background-color: #fff;
+  border-radius: 15px;
+}
+
+.transaction-card-header {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.transaction-btn {
+  display: block;
+  margin-inline: auto;
+  margin-top: 20px;
+  padding: 10px;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  background-color: #0b60db;
+  font-weight: bold;
+  transition: 0.3s ease-in-out all;
+}
+
+.transaction-btn:hover {
+  background-color: #10499a;
+}

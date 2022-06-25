@@ -96,6 +96,7 @@ const Navbar = ({ showNav, setShowNav }) => {
                   >
                     {showNav ? (
                       <AiOutlineCloseCircle
+                        color="white"
                         onClick={() => {
                           setShowNav(false);
                         }}
@@ -103,6 +104,7 @@ const Navbar = ({ showNav, setShowNav }) => {
                       />
                     ) : (
                       <GiHamburgerMenu
+                        color="white"
                         onClick={() => {
                           setShowNav(true);
                         }}

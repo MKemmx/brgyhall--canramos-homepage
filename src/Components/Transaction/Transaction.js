@@ -30,8 +30,10 @@ const Transaction = () => {
   };
   // Fetch User Transactions
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const userTransactions = async () => {
     try {
+      setLoading(true);
       const { data } = await axios.get(
         `${API_LINK}/transaction/read-user-transaction`,
         config
@@ -56,9 +58,10 @@ const Transaction = () => {
         })
         .reverse();
       setData(mergeData);
-      //
-      console.log(mergeData);
+
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.log(error.response.data.msg);
     }
   };
@@ -77,13 +80,8 @@ const Transaction = () => {
         customBodyRender: (value, tableMeta, updateValue) => {
           return (
             <>
-              {value === 1 ? (
-                <p>Barangay Certificate</p>
-              ) : (
-                <>
-                  <p>Barangay Certificate</p>
-                </>
-              )}
+              {value === 1 && <p>Barangay Certificate</p>}
+              {value === 2 && <p>Barangay Indigency</p>}
             </>
           );
         },
@@ -218,13 +216,15 @@ const Transaction = () => {
 
   // Function Cancel Transaction
   const cancelTransaction = async (data) => {
+    console.log(data);
     const toCancel = {
       status: "cancelled",
+      id: data.currentId,
     };
 
     if (data.currentNum === 1) {
       await axios.put(
-        `${API_LINK}/certificate/update-certificate/${data.currentId}`,
+        `${API_LINK}/certificate/update-certificate-status`,
         toCancel
       );
       userTransactions();
@@ -237,7 +237,7 @@ const Transaction = () => {
 
     if (data.currentNum === 2) {
       await axios.put(
-        `${API_LINK}/indigency/update-indigency/${data.currentId}`,
+        `${API_LINK}/indigency/update-indigency-status`,
         toCancel
       );
       userTransactions();
@@ -337,7 +337,7 @@ const Transaction = () => {
               </div>
               <button
                 onClick={() => {
-                  sendRequest(1);
+                  sendRequest(2);
                 }}
                 className="transaction-btn"
               >
@@ -358,7 +358,7 @@ const Transaction = () => {
               </div>
               <button
                 onClick={() => {
-                  sendRequest(1);
+                  sendRequest(3);
                 }}
                 className="transaction-btn"
               >
@@ -366,14 +366,23 @@ const Transaction = () => {
               </button>
             </div>
           </div>
-          <div className="primeReactContainer">
-            <MUIDataTable
-              title={"My Transactions"}
-              data={data}
-              columns={columns}
-              options={options}
-            />
-          </div>
+
+          {loading ? (
+            <div className="pulseLoader-container">
+              <div className="pulseLoader"></div>
+            </div>
+          ) : (
+            <>
+              <div className="primeReactContainer">
+                <MUIDataTable
+                  title={"My Transactions"}
+                  data={data}
+                  columns={columns}
+                  options={options}
+                />
+              </div>
+            </>
+          )}
         </>
       )}
     </>
